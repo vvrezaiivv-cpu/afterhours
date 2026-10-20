@@ -1,0 +1,131 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090a10">
+  <title>Afterhours — Discover Music</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #090a10;
+      color: #f4f1fa;
+      font-family: Arial, sans-serif;
+      padding: 25px 20px 40px;
+    }
+    header { padding: 22px 0 30px; }
+    .logo { letter-spacing: 5px; font-size: 13px; color: #b9a7ff; }
+    h1 { font-size: 38px; margin: 18px 0 10px; letter-spacing: -1px; }
+    .sub { color: #9694a5; line-height: 1.6; font-size: 14px; }
+    .search {
+      width: 100%; padding: 15px; border-radius: 14px;
+      background: #151620; border: 1px solid #292a38;
+      color: white; font-size: 15px; margin: 12px 0 28px;
+    }
+    h2 { font-size: 18px; margin: 15px 0; }
+    .tags { display: flex; gap: 9px; flex-wrap: wrap; }
+    .tag {
+      border: 1px solid #30303e; border-radius: 30px;
+      background: #151620; color: #d5d1e2; padding: 10px 15px;
+    }
+    .tag:focus, .tag.active { background: #c3b2ff; color: #12101b; }
+    .card {
+      background: linear-gradient(135deg,#202036,#12131c);
+      border: 1px solid #292a38; border-radius: 18px;
+      padding: 20px; margin-top: 14px;
+    }
+    .eyebrow { color: #b9a7ff; font-size: 11px; letter-spacing: 2px; }
+    .song { font-size: 21px; margin: 12px 0 5px; }
+    .artist { color: #9d9aaa; font-size: 14px; }
+    .play {
+      border: 0; border-radius: 30px; padding: 12px 18px;
+      margin-top: 18px; background: #c3b2ff; color: #15121f;
+      font-weight: bold;
+    }
+    #message { color: #b9a7ff; font-size: 13px; margin-top: 18px; }
+    footer { color: #676777; text-align: center; font-size: 11px; margin-top: 40px; letter-spacing: 2px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">A F T E R H O U R S</div>
+    <h1>Find your<br>next feeling.</h1>
+    <p class="sub">Music for the hours that belong to you.</p>
+  </header>
+
+  <input id="search" class="search" placeholder="Search a mood or genre..." />
+
+  <h2>Explore your mood</h2>
+  <div class="tags">
+    <button class="tag active" data-mood="all">All</button>
+    <button class="tag" data-mood="dreamy">Dreamy</button>
+    <button class="tag" data-mood="indie">Indie</button>
+    <button class="tag" data-mood="sad">Melancholy</button>
+    <button class="tag" data-mood="kpop">K-pop</button>
+  </div>
+
+  <h2 style="margin-top:32px">Tonight's selection</h2>
+  <div id="songs">
+    <article class="card" data-tags="dreamy indie">
+      <div class="eyebrow">01 / DREAMY INDIE</div>
+      <div class="song">The Marías</div>
+      <div class="artist">Soft sounds for late nights</div>
+      <button class="play" data-info="The Marías">Explore ↗</button>
+    </article>
+    <article class="card" data-tags="sad indie">
+      <div class="eyebrow">02 / MELANCHOLY</div>
+      <div class="song">Conan Gray</div>
+      <div class="artist">For the feelings you can't name</div>
+      <button class="play" data-info="Conan Gray">Explore ↗</button>
+    </article>
+    <article class="card" data-tags="kpop dreamy">
+      <div class="eyebrow">03 / K-POP</div>
+      <div class="song">BOYNEXTDOOR</div>
+      <div class="artist">A little chaos, a little comfort</div>
+      <button class="play" data-info="BOYNEXTDOOR">Explore ↗</button>
+    </article>
+    <article class="card" data-tags="indie dreamy">
+      <div class="eyebrow">04 / ALTERNATIVE</div>
+      <div class="song">Arctic Monkeys</div>
+      <div class="artist">For a different kind of midnight</div>
+      <button class="play" data-info="Arctic Monkeys">Explore ↗</button>
+    </article>
+  </div>
+
+  <p id="message">Choose a mood and follow the sound.</p>
+  <footer>MADE FOR THE HOURS AFTER DARK</footer>
+
+  <script>
+    const cards = [...document.querySelectorAll('.card')];
+    const buttons = [...document.querySelectorAll('[data-mood]')];
+    let mood = 'all';
+
+    function filterSongs() {
+      const query = document.getElementById('search').value.toLowerCase();
+      cards.forEach(card => {
+        const matchesMood = mood === 'all' || card.dataset.tags.includes(mood);
+        const matchesText = card.innerText.toLowerCase().includes(query);
+        card.hidden = !(matchesMood && matchesText);
+      });
+    }
+
+    buttons.forEach(button => button.addEventListener('click', () => {
+      mood = button.dataset.mood;
+      buttons.forEach(b => b.classList.toggle('active', b === button));
+      filterSongs();
+    }));
+
+    document.getElementById('search').addEventListener('input', filterSongs);
+
+    document.querySelectorAll('[data-info]').forEach(button => {
+      button.addEventListener('click', () => {
+        const artist = button.dataset.info;
+        document.getElementById('message').textContent =
+          'Discover ' + artist + ' on your favorite music platform.';
+      });
+    });
+  </script>
+</body>
+</html>
